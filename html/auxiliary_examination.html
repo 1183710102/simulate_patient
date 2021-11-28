@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> 主页面 </title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css?v=4.1.0" rel="stylesheet">
+
+    <script type="text/javascript">
+        var score = parseFloat(location.search.substring(1));
+        var auxiliary_no = 0;
+        var asked = new Array();
+        window.onload = function(){   
+            if (window.sessionStorage) {   
+                var auxiliary_no_tmp = parseInt(window.sessionStorage.getItem("auxiliary_num"));  
+                var div = document.getElementById("examinated-events"); 
+                var asked_tmp = JSON.parse(window.sessionStorage.getItem("asked"));
+                div.innerHTML = window.sessionStorage.getItem("auxiliary_record");     
+            }
+            if(asked_tmp){
+                asked = asked_tmp;
+            }
+            if(auxiliary_no_tmp){
+                auxiliary_no = auxiliary_no_tmp;
+            }
+        };
+
+        function saveToStorage(){
+            var auxiliary_num = auxiliary_no;
+            var auxiliary_record = document.getElementById("examinated-events").innerHTML;
+            window.sessionStorage.setItem("auxiliary_num", auxiliary_num);
+            window.sessionStorage.setItem("auxiliary_record", auxiliary_record);
+            window.sessionStorage.setItem("asked", JSON.stringify(asked));
+        }
+
+        function jump_patient_information(){
+            saveToStorage();
+            var goal = "patient_information.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_physical_examination(){
+            saveToStorage();
+            var goal = "physical_examination.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_inquiry(){
+            saveToStorage();
+            var goal = "inquiry.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_DDX(){
+            saveToStorage();
+            var goal = "DDX.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_primary_diagnosis(){
+            saveToStorage();
+            var goal = "primary_diagnosis.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_treatment(){
+            saveToStorage();
+            var goal = "treatment.html?"+score;
+            window.location.href = goal;
+        }
+        
+        function addExam(var1){
+            if(asked.includes(var1)){
+                alert("你已经检查过该项，不建议重复检查，可以查找之前的检查结果。");
+            }
+            else{
+                auxiliary_no +=1;
+                if (auxiliary_no<=times.find('auxiliary_no')) {
+                    asked.push(var1);
+                    var events = document.getElementById("examinated-events");
+                    var que = var1;
+                    events.innerHTML = events.innerHTML+"<li><div onclick=\"showResults(\'"+que+"\')\"><p>"+que+"</p></div></li>";
+                    score += quary_set.find(que).score;
+                    showResults(que);
+                }
+                else{
+                    alert("辅助检查项目已达上限");
+                }
+            }
+        }
+        function jump_point(){
+            saveToStorage();
+            var r = confirm("确定要结束训练吗？")
+            if(r==true){
+                var goal = "point.html?"+score;
+                window.location.href = goal;
+            }
+            
+        }
+
+
+        function showResults(var1){
+            var result = document.getElementById("results");
+            var que = var1;
+            var answer = quary_set.find(que).answer;
+            result.innerHTML = "<img src='"+answer+"' width='350px' height='400px'>";
+        }
+
+    </script>
+    
+
+
+</head>
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeIn">
+
+            <div class="col-sm-6">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs" style="width:1000px;">
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_patient_information()">患者信息</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_inquiry()">问诊</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_physical_examination()">体格检查</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_primary_diagnosis()">初步诊断</button>
+                        </li>
+                        <li class="active"><a href="#auxiliary-examination" aria-expanded="false">辅助检查</a>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_DDX()">确定诊断</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_treatment()">治疗</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="auxiliary-examination" class="tab-pane active">
+                            <div class="panel-body-row">
+                            
+                                <div class="tabs-container" style="width:400px">
+                                <div class="panel-body-row" style="width:400px">
+                                    <!--左侧导航开始-->
+                                    <nav class="navbar-default navbar-static-side" role="navigation" style="width:120px;overflow:auto;">
+                                        <div class="nav-close"><i class="fa fa-times-circle"></i>
+                                        </div>
+                                        <div class="sidebar-collapse">
+                                            <ul class="nav nav-tabs" id="side-menu" style="overflow: auto">
+                                                <li class="nav-header">
+                                                    <div class="dropdown profile-element">
+                                                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                                            <span class="clear">
+                                                                <span class="block m-t-xs" style="font-size:20px;">
+                                                                    <strong class="font-bold">辅助检查项目</strong>
+                                                                </span>
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                </li>
+
+                                                <li class="active">
+                                                    <a data-toggle="tab" href="#CT">
+                                                        <span class="nav-label">CT</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#MRI">
+                                                        <span class="nav-label">MRI</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#PET-CT">
+                                                        <span class="nav-label">PET-CT</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#X-rays">
+                                                        <span class="nav-label">X线</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#common-pathogen">
+                                                        <span class="nav-label">常见病原体</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#DUS">
+                                                        <span class="nav-label">超声</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#electrophysiology">
+                                                        <span class="nav-label">电生理</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#biopsy">
+                                                        <span class="nav-label">活检</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#endoscope">
+                                                        <span class="nav-label">内镜</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#laboratory-examination">
+                                                        <span class="nav-label">实验室检查</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#laparoscopic-exploration">
+                                                        <span class="nav-label">腹腔镜探查</span>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                    <!--左侧导航结束-->  
+
+                                    <div class="tab-content"  style="width:300px;overflow:auto;">
+                                            <div id="CT" class="tab-pane active" >
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addExam('颅脑CT平扫')"><p>颅脑CT平扫</p ></div></li>
+                                                    <li><div onclick="addExam('颅脑增强扫描')"><p>颅脑增强扫描</p ></div></li>
+                                                    <li><div onclick="addExam('颈部CT平扫')"><p>颈部CT平扫</p ></div></li>
+                                                    <li><div onclick="addExam('胸部CT平扫')"><p>胸部CT平扫</p ></div></li>
+                                                    <li><div onclick="addExam('腹部CT平扫')"><p>腹部CT平扫</p ></div></li>
+                                                    <li><div onclick="addExam('盆腔CT平扫')"><p>盆腔CT平扫</p ></div></li>
+                                                    <li><div onclick="addExam('上肢CT扫描')"><p>上肢CT扫描</p ></div></li>
+                                                    <li><div onclick="addExam('下肢CT扫描')"><p>下肢CT扫描</p ></div></li>
+                                                    <li><div onclick="addExam('关节CT检查')"><p>关节CT检查</p ></div></li>
+                                                    <li><div onclick="addExam('颈椎CT平扫')"><p>颈椎CT平扫</p ></div></li>
+                                                    <li><div onclick="addExam('胸椎CT扫描')"><p>胸椎CT扫描</p ></div></li>
+                                                    <li><div onclick="addExam('腰椎CT扫描')"><p>腰椎CT扫描</p ></div></li>
+                                                </ul>
+                                                </div>      
+                                                </div>
+                                            </div>
+                                            <div id="MRI" class="tab-pane" >
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addExam('颅内Willis动脉环MRI血管成像')"><p>颅内Willis动脉环MRI血管成像</p ></div></li>
+                                                    <li><div onclick="addExam('颅脑MRI扫描')"><p>颅脑MRI扫描</p ></div></li>
+                                                    <li><div onclick="addExam('颈部MRI扫描')"><p>颈部MRI扫描</p ></div></li>
+                                                    <li><div onclick="addExam('颈部MRI血管成像')"><p>颈部MRI血管成像（MRA)</p ></div></li>
+                                                    <li><div onclick="addExam('胸部MRI扫描')"><p>胸部MRI扫描</p ></div></li>
+                                                    <li><div onclick="addExam('腹部MRI扫描')"><p>腹部MRI扫描</p ></div></li>
+                                                    <li><div onclick="addExam('盆腔MRI扫描')"><p>盆腔MRI扫描</p ></div></li>
+                                                    <li><div onclick="addExam('臂部MRI扫描')"><p>臂部MRI扫描</p ></div></li>
+                                                    <li><div onclick="addExam('肩关节MRI检查')"><p>肩关节MRI检查</p ></div></li>
+                                                    <li><div onclick="addExam('髋关节MRI检查')"><p>髋关节MRI检查</p ></div></li>
+                                                    <li><div onclick="addExam('膝关节MRI检查')"><p>膝关节MRI检查</p ></div></li>
+                                                    <li><div onclick="addExam('下肢MRI扫描')"><p>下肢MRI扫描</p ></div></li>
+                                                    <li><div onclick="addExam('胸椎MRI扫描')"><p>胸椎MRI扫描</p ></div></li>
+                                                    <li><div onclick="addExam('腰椎MRI扫描')"><p>腰椎MRI扫描</p ></div></li>
+                                                </ul>
+                                                </div>      
+                                                </div>
+                                            </div>
+                                            <div id="PET-CT" class="tab-pane" >
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addExam('PET-CT')"><p>PET-CT</p ></div></li>
+                                                </ul>
+                                                </div>      
+                                                </div>
+                                            </div>
+                                            <div id="X-rays" class="tab-pane" >
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addExam('头颅平片')"><p>头颅平片</p ></div></li>
+                                                    <li><div onclick="addExam('颞下颌关节片')"><p>颞下颌关节片</p ></div></li>
+                                                    <li><div onclick="addExam('肩关节片')"><p>肩关节片</p ></div></li>
+                                                    <li><div onclick="addExam('胸部平片')"><p>胸部平片</p ></div></li>
+                                                    <li><div onclick="addExam('腹部平片')"><p>腹部平片</p ></div></li>
+                                                    <li><div onclick="addExam('上消化道摄影检查')"><p>上消化道摄影检查</p ></div></li>
+                                                    <li><div onclick="addExam('下消化道摄影检查')"><p>下消化道摄影检查</p ></div></li>
+                                                    <li><div onclick="addExam('食管钡餐透视')"><p>食管钡餐透视</p ></div></li>
+                                                    <li><div onclick="addExam('钡灌肠')"><p>钡灌肠</p ></div></li>
+                                                    <li><div onclick="addExam('骨盆X线检查')"><p>骨盆X线检查</p ></div></li>
+                                                    <li><div onclick="addExam('颈椎片')"><p>颈椎片</p ></div></li>
+                                                    <li><div onclick="addExam('腰椎片')"><p>腰椎片</p ></div></li>
+                                                    <li><div onclick="addExam('骶椎片')"><p>骶椎片</p ></div></li>
+                                                    <li><div onclick="addExam('骨密度测定')"><p>骨密度测定</p ></div></li>
+                                                    <li><div onclick="addExam('股骨片')"><p>股骨片</p ></div></li>
+                                                    <li><div onclick="addExam('髋关节片')"><p>髋关节片</p ></div></li>
+                                                    <li><div onclick="addExam('上肢平片')"><p>上肢平片</p ></div></li>
+                                                    <li><div onclick="addExam('下肢平片')"><p>下肢平片</p ></div></li>
+                                                    <li><div onclick="addExam('心血管造影')"><p>心血管造影</p ></div></li>
+                                                </ul>
+                                                </div>      
+                                                </div>
+                                            </div>
+                                            <div id="common-pathogen" class="tab-pane" >
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addExam('单纯疱疹病毒DNA')"><p>单纯疱疹病毒DNA</p ></div></li>
+                                                    <li><div onclick="addExam('肥达反应')"><p>肥达反应</p ></div></li>
+                                                    <li><div onclick="addExam('肺炎支原体补体结合试验')"><p>肺炎支原体补体结合试验</p ></div></li>
+                                                    <li><div onclick="addExam('骨髓细菌培养')"><p>骨髓细菌培养</p ></div></li>
+                                                    <li><div onclick="addExam('呼吸道合胞病毒')"><p>呼吸道合胞病毒</p ></div></li>
+                                                    <li><div onclick="addExam('结核分枝杆菌抗体')"><p>结核分枝杆菌抗体</p ></div></li>
+                                                    <li><div onclick="addExam('流感病毒抗体')"><p>流感病毒抗体</p ></div></li>
+                                                    <li><div onclick="addExam('外斐试验')"><p>外斐试验</p ></div></li>
+                                                    <li><div onclick="addExam('腺病毒抗体')"><p>腺病毒抗体</p ></div></li>
+                                                    <li><div onclick="addExam('血细菌培养')"><p>血细菌培养</p ></div></li>
+                                                    <li><div onclick="addExam('厌氧菌测验')"><p>厌氧菌测验</p ></div></li>
+                                                    <li><div onclick="addExam('咽拭子细菌培养')"><p>咽拭子细菌培养</p ></div></li>
+                                                    <li><div onclick="addExam('幽门螺旋杆菌检测')"><p>幽门螺旋杆菌检测</p ></div></li>
+                                                    <li><div onclick="addExam('支原体的血清学检测')"><p>支原体的血清学检测</p ></div></li>
+                                                </ul>
+                                                </div>      
+                                                </div>
+                                            </div> 
+                                            <div id="DUS" class="tab-pane" >
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addExam('睾丸超声')"><p>睾丸超声</p ></div></li>
+                                                    <li><div onclick="addExam('消化系超声')"><p>消化系超声</p ></div></li>
+                                                    <li><div onclick="addExam('泌尿系超声')"><p>泌尿系超声</p ></div></li>
+                                                    <li><div onclick="addExam('胃肠道超声')"><p>胃肠道超声</p ></div></li>
+                                                    <li><div onclick="addExam('阑尾')"><p>阑尾</p ></div></li>
+                                                    <li><div onclick="addExam('心脏超声')"><p>心脏超声</p ></div></li>
+                                                    <li><div onclick="addExam('甲状腺彩超')"><p>甲状腺彩超</p ></div></li>
+                                                    <li><div onclick="addExam('乳腺彩超')"><p>乳腺彩超</p ></div></li>
+                                                    <li><div onclick="addExam('颈部淋巴结彩超')"><p>颈部淋巴结彩超</p ></div></li>
+                                                    <li><div onclick="addExam('腹股沟区淋巴结彩超')"><p>腹股沟区淋巴结彩超</p ></div></li>
+                                                    <li><div onclick="addExam('腋窝淋巴结彩超')"><p>腋窝淋巴结彩超</p ></div></li>
+                                                    <li><div onclick="addExam('锁骨上淋巴结彩超')"><p>锁骨上淋巴结彩超</p ></div></li>
+                                                    <li><div onclick="addExam('上肢动脉彩色多普勒超声')"><p>上肢动脉彩色多普勒超声</p ></div></li>
+                                                    <li><div onclick="addExam('上肢静脉彩色多普勒超声')"><p>上肢静脉彩色多普勒超声</p ></div></li>
+                                                    <li><div onclick="addExam('下肢动脉彩色多普勒超声')"><p>下肢动脉彩色多普勒超声</p ></div></li>
+                                                    <li><div onclick="addExam('下肢静脉彩色多普勒超声')"><p>下肢静脉彩色多普勒超声</p ></div></li>
+                                                </ul>
+                                                </div>      
+                                                </div>
+                                            </div>
+                                            <div id="electrophysiology" class="tab-pane" >
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addExam('肌电图检查')"><p>肌电图检查</p ></div></li>
+                                                    <li><div onclick="addExam('脑电图检查')"><p>脑电图检查</p ></div></li>
+                                                    <li><div onclick="addExam('脑电地形图扫描检查')"><p>脑电地形图扫描检查</p ></div></li>
+                                                    <li><div onclick="addExam('心电图检查')"><p>心电图检查</p ></div></li> 
+                                                </ul>
+                                                </div>      
+                                                </div>
+                                            </div>
+                                            <div id="biopsy" class="tab-pane" >
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addExam('直肠活检')"><p>直肠活检</p ></div></li>
+                                                    <li><div onclick="addExam('支气管活检')"><p>支气管活检</p ></div></li>
+                                                    <li><div onclick="addExam('胃活检')"><p>胃活检</p ></div></li>
+                                                    <li><div onclick="addExam('肾活检')"><p>肾活检</p ></div></li>
+                                                    <li><div onclick="addExam('食管活检')"><p>食管活检</p ></div></li>
+                                                    <li><div onclick="addExam('淋巴结活检')"><p>淋巴结活检</p ></div></li>
+                                                    <li><div onclick="addExam('结肠活检')"><p>结肠活检</p ></div></li>
+                                                    <li><div onclick="addExam('甲状腺活检')"><p>甲状腺活检</p ></div></li>
+                                                    <li><div onclick="addExam('骨髓活检')"><p>骨髓活检</p ></div></li>
+                                                    <li><div onclick="addExam('肝活检')"><p>肝活检</p ></div></li>
+                                                    <li><div onclick="addExam('肺活检')"><p>肺活检</p ></div></li>
+                                                    <li><div onclick="addExam('骨髓涂片')"><p>骨髓涂片</p ></div></li>
+                                                    <li><div onclick="addExam('膀胱活检')"><p>膀胱活检</p ></div></li>
+                                                </ul>
+                                                </div>      
+                                                </div>
+                                            </div>
+                                            <div id="endoscope" class="tab-pane" >
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addExam('关节镜')"><p>关节镜</p ></div></li>
+                                                    <li><div onclick="addExam('肾盂镜')"><p>肾盂镜</p ></div></li> 
+                                                    <li><div onclick="addExam('下消化道内镜检查')"><p>下消化道内镜检查</p ></div></li>
+                                                    <li><div onclick="addExam('支气管镜检查')"><p>支气管镜检查</p ></div></li> 
+                                                </ul>
+                                                </div>      
+                                                </div>
+                                            </div>
+                                            <div id="laboratory-examination" class="tab-pane" >
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addExam('血糖及代谢产物')"><p>血糖及代谢产物</p ></div></li>
+                                                    <li><div onclick="addExam('血型')"><p>血型</p ></div></li>
+                                                    <li><div onclick="addExam('血脂')"><p>血脂</p ></div></li>
+                                                    <li><div onclick="addExam('离子')"><p>离子</p ></div></li>
+                                                    <li><div onclick="addExam('凝血')"><p>凝血</p ></div></li>
+                                                    <li><div onclick="addExam('肝功能')"><p>肝功能</p ></div></li>
+                                                    <li><div onclick="addExam('乙型肝炎')"><p>乙型肝炎</p ></div></li>
+                                                    <li><div onclick="addExam('肾功能')"><p>肾功能</p ></div></li>
+                                                    <li><div onclick="addExam('尿常规')"><p>尿常规</p ></div></li>
+                                                    <li><div onclick="addExam('尿沉渣定量尿液镜检')"><p>尿沉渣定量尿液镜检</p ></div></li>
+                                                    <li><div onclick="addExam('尿液其他检查')"><p>尿液其他检查</p ></div></li>
+                                                    <li><div onclick="addExam('便常规')"><p>便常规</p ></div></li>
+                                                    <li><div onclick="addExam('红细胞沉降率')"><p>红细胞沉降率</p ></div></li>
+                                                    <li><div onclick="addExam('血流变')"><p>血流变</p ></div></li>
+                                                    <li><div onclick="addExam('C反应蛋白')"><p>C反应蛋白</p ></div></li>
+                                                    <li><div onclick="addExam('血清淀粉酶')"><p>血清淀粉酶</p ></div></li>
+                                                    <li><div onclick="addExam('血清补体检测')"><p>血清补体检测</p ></div></li>
+                                                    <li><div onclick="addExam('血清免疫球蛋白')"><p>血清免疫球蛋白</p ></div></li>
+                                                    <li><div onclick="addExam('自身抗体检测')"><p>自身抗体检测</p ></div></li>
+                                                    <li><div onclick="addExam('利钠肽')"><p>利钠肽</p ></div></li>
+                                                    <li><div onclick="addExam('心肌酶和心肌蛋白')"><p>心肌酶和心肌蛋白</p ></div></li>
+                                                    <li><div onclick="addExam('心脏平板运动试验')"><p>心脏平板运动试验</p ></div></li>
+                                                    <li><div onclick="addExam('血气分析')"><p>血气分析</p ></div></li>
+                                                    <li><div onclick="addExam('肺功能')"><p>肺功能</p ></div></li>
+                                                    <li><div onclick="addExam('痰液检查')"><p>痰液检查</p ></div></li>
+                                                    <li><div onclick="addExam('性传播疾病病原体')"><p>性传播疾病病原体</p ></div></li>
+                                                    <li><div onclick="addExam('阴道分泌物检测')"><p>阴道分泌物检测</p ></div></li>
+                                                    <li><div onclick="addExam('肿瘤标志物')"><p>肿瘤标志物</p ></div></li>
+                                                    <li><div onclick="addExam('脑脊液')"><p>脑脊液</p ></div></li>
+                                                    <li><div onclick="addExam('甲状腺功能')"><p>甲状腺功能</p ></div></li>
+                                                    <li><div onclick="addExam('甲状腺激素其他检查')"><p>甲状腺激素其他检查</p ></div></li>
+                                                    <li><div onclick="addExam('细胞免疫检测')"><p>细胞免疫检测</p ></div></li>
+                                                    <li><div onclick="addExam('狼疮')"><p>狼疮</p ></div></li> 
+                                                    <li><div onclick="addExam('微量元素')"><p>微量元素</p ></div></li>
+                                                    <li><div onclick="addExam('血清铁及代谢产物')"><p>血清铁及代谢产物</p ></div></li> 
+                                                </ul>
+                                                </div>      
+                                                </div>
+                                            </div>          
+                                            <div id="laparoscopic-exploration" class="tab-pane" >
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addExam('腹腔镜探查')"><p>腹腔镜检查</p ></div></li>
+                                                </ul>
+                                                </div>      
+                                                </div>
+                                            </div>
+                                    </div> 
+                                </div> 
+                                </div>
+
+                                <div class="ibox chat-view" style="width:250px">
+
+                                    <div class="ibox-title">
+                                        <strong>检查记录</strong>
+                                    </div>
+
+                                    <div class="column colmenu">
+                                        <ul id="examinated-events">
+
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="ibox chat-view" style="width:400px">
+
+                                    <div class="ibox-title">
+                                        <strong>检查结果</strong>
+                                    </div>
+
+                                    <div class="column colmenu">
+                                        <ul id="results">
+                                        </ul>
+                                    </div>
+                                
+                                </div>
+                                
+                            
+                            </div>
+
+
+                        </div>
+                    </div>
+                    </div>
+            </div>
+            <div id="dg" style="z-index: 9999999; position: fixed ! important; right: 40px; bottom: 40px;">
+                <table width="100%" style="position: absolute; width:260px; right: 40px; bottom: 40px;">
+                    <button class="btn-primary btn-lg" onclick="jump_point()">结束训练</button>
+                </table>
+            </div>
+
+</div>
+
+ 
+<!-- 全局js -->
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/bootstrap.min.js?v=3.3.6"></script>
+
+
+
+    <!-- 自定义js -->
+    <script src="js/content.js?v=1.0.0"></script>
+    <script src="js/dictionary.js"></script>
+    
+
+
+</body>
+</html>

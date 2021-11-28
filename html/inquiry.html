@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> 主页面 </title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css?v=4.1.0" rel="stylesheet">
+
+    <script type="text/javascript">
+        var score = parseFloat(location.search.substring(1));
+        var quary_no = 0;
+        var asked = new Array();
+        window.onload = function(){   
+            if (window.sessionStorage) {   
+                var quary_no_tmp = parseInt(window.sessionStorage.getItem("quary_num")); 
+                var asked_tmp = JSON.parse(window.sessionStorage.getItem("asked"));
+                var div = document.getElementById("chat-discussion"); 
+                div.innerHTML = window.sessionStorage.getItem("quary_record"); 
+            }
+            if(asked_tmp){
+                asked = asked_tmp;
+            }
+            if(quary_no_tmp){
+                quary_no = quary_no_tmp;
+            }
+        };
+
+        function saveToStorage(){
+            var quary_num = quary_no;
+            var quary_record = document.getElementById("chat-discussion").innerHTML;
+            window.sessionStorage.setItem("quary_num", quary_num);
+            window.sessionStorage.setItem("quary_record", quary_record);
+            window.sessionStorage.setItem("asked", JSON.stringify(asked));
+        }
+
+        function addQuestion(var1){
+            if(asked.includes(var1)){
+                alert("你已经问过该问题，不建议重复问，可以查找之前的问诊结果。");
+            }
+            else{
+                quary_no +=1;
+                if(quary_no <= times.find("quary_no")){
+                    asked.push(var1);
+                    var div = document.getElementById("chat-discussion");
+                    var que = var1;
+                    var answer = quary_set.find(que).answer;
+                    div.innerHTML = div.innerHTML+"<div class='chat-message'> <img class='message-avatar' src='img/a4.jpg' alt=''> <div class='message'> <a class='message-author' href='#''> 医生 </a> <span class='message-content'> " + que +" </div></div><div class='chat-message'> <img class='message-avatar' src='img/a1.jpg' alt=''> <div class='message'> <a class='message-author' href='#''> 患者 </a> <span class='message-content'>"+ answer +"</span></div></div>";
+                    boxScroll(div);
+                    if(quary_set.find(que).score!=0){
+                        score += quary_set.find(que).score;
+                    }
+                }
+                else{
+                    alert("问诊题目数已达上限。");
+                }
+            }
+        }
+
+        function boxScroll(o){
+            // 使滚动条一直在最下面
+            o.scrollTop = o.scrollHeight;
+        }
+
+        function jump_patient_information(){
+            saveToStorage();
+            var goal = "patient_information.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_physical_examination(){
+            saveToStorage();
+            var goal = "physical_examination.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_auxiliary_examination(){
+            saveToStorage();
+            var goal = "auxiliary_examination.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_DDX(){
+            saveToStorage();
+            var goal = "DDX.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_primary_diagnosis(){
+            saveToStorage();
+            var goal = "primary_diagnosis.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_treatment(){
+            saveToStorage();
+            var goal = "treatment.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_point(){
+            saveToStorage();
+            var r = confirm("确定要结束训练吗？")
+            if(r==true){
+                var goal = "point.html?"+score;
+                window.location.href = goal;
+            }
+        }
+
+    </script>
+    
+
+
+</head>
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeIn">
+
+            <div class="col-sm-6">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs" style="width:1000px;">
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_patient_information()">患者信息</button>
+                        </li>
+                        <li class="active"><a href="#inquiry" aria-expanded="true">问诊</a>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_physical_examination()">体格检查</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_primary_diagnosis()">初步诊断</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_auxiliary_examination()">辅助检查</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_DDX()">确定诊断</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_treatment()">治疗</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="inquiry" class="tab-pane active">
+                            <div class="panel-body-row">
+                            
+
+                                    
+                                        <!--左侧导航开始-->
+                                        <nav class="navbar-default navbar-static-side" role="navigation" style="width:120px;overflow:auto;">
+                                            <div class="nav-close"><i class="fa fa-times-circle"></i>
+                                            </div>
+                                            <div class="sidebar-collapse">
+                                                <ul class="nav nav-tabs" id="side-menu" style="overflow: auto">
+                                                    <li class="nav-header">
+                                                        <div class="dropdown profile-element">
+                                                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                                                <span class="clear">
+                                                                    <span class="block m-t-xs" style="font-size:20px;">
+                                                                        <strong class="font-bold">问诊项目</strong>
+                                                                    </span>
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                    </li>
+
+                                                    <li class="active">
+                                                        <a data-toggle="tab" href="#basic-info">
+                                                            <span class="nav-label">基本情况</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#current">
+                                                            <span class="nav-label">现病史</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#before">
+                                                            <span class="nav-label">既往史</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#individual">
+                                                            <span class="nav-label">个人史</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#family">
+                                                            <span class="nav-label">家族史</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#marriage">
+                                                            <span class="nav-label">月经婚育史</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#gynecology">
+                                                            <span class="nav-label">妇产科问题</span>
+                                                        </a>
+                                                    </li>
+                                                    
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#child">
+                                                            <span class="nav-label">小儿问题</span>
+                                                        </a>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </nav>
+                                        <!--左侧导航结束-->
+
+                                        <div class="tab-content" style="width:250px;overflow: auto;">
+                                            <div id="basic-info" class="tab-pane active" >
+                                                <div class="panel-body" >
+                                                    <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addQuestion('您好，我是您宝宝的主治医生，我叫xxx。')"><p>您好，我是您宝宝的主治医生，我叫xxx。</p></div></li>
+                                                        <li><div onclick="addQuestion('宝宝叫什么名字？是男孩还是女孩啊？')"><p>宝宝叫什么名字？是男孩还是女孩啊？</p></div></li>
+                                                        <li><div onclick="addQuestion('宝宝多大了？')"><p>宝宝多大了？</p></div></li>
+                                                        <li><div onclick="addQuestion('是哪里人？')"><p>是哪里人？</p></div></li>
+                                                    </ul>
+                                                    </div>      
+                                                </div>
+                                            </div>
+                                            <div id="current" class="tab-pane">
+                                                <div class="panel-body">
+                                                <div class="chat-discussion">
+
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addQuestion('宝宝怎么了，哪里不舒服？')"><p>宝宝怎么了，哪里不舒服？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('左侧还是右侧？')"><p>左侧还是右侧？</p></div></li>                                                       
+                                                        <li><div onclick="addQuestion('从什么时候开始的/发病多久了？')"><p>从什么时候开始的/发病多久了？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('第一次发现的时候有什么诱因吗？')"><p>第一次发现的时候有什么诱因吗？</p></div></li>
+                                                        <li><div onclick="addQuestion('包块大约有多大？')"><p>包块大约有多大？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('包块是一直存在吗？有没有消失的时候？')"><p>包块是一直存在吗？有没有消失的时候？</p></div></li>                                                       
+                                                        <li><div onclick="addQuestion('包块的触感如何？质地怎么样？')"><p>包块的触感如何？质地怎么样？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('每次发病包块的大小有变化吗？有无变大或缩小？')"><p>每次发病包块的大小有变化吗？有无变大或缩小？</p></div></li>
+                                                        <li><div onclick="addQuestion('有没有发现阴囊不对称的情况？')"><p>有没有发现阴囊不对称的情况？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('除了腹股沟包块，还有什么其他症状？')"><p>除了腹股沟包块，还有什么其他症状？</p></div></li>                                                       
+                                                        <li><div onclick="addQuestion('呕吐物是什么内容？')"><p>呕吐物是什么内容？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('是流出来的还是喷出来的？')"><p>是流出来的还是喷出来的？</p></div></li>
+                                                        <li><div onclick="addQuestion('吐的量多不多？')"><p>吐的量多不多？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('有没有发烧呢？')"><p>有没有发烧呢？</p></div></li>                                                       
+                                                        <li><div onclick="addQuestion('有没有咳嗽咳痰？')"><p>有没有咳嗽咳痰？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('有没有腹胀、腹痛、停止排气排便？')"><p>有没有腹胀、腹痛、停止排气排便？</p></div></li>
+                                                        <li><div onclick="addQuestion('有没有拉肚子？')"><p>有没有拉肚子？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('大便颜色怎么样？有没有血？')"><p>大便颜色怎么样？有没有血？</p></div></li>                                                       
+                                                        <li><div onclick="addQuestion('排尿怎么样？')"><p>排尿怎么样？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('尿频尿急尿痛？')"><p>尿频尿急尿痛？</p></div></li>
+                                                        <li><div onclick="addQuestion('在哪里看过医生吗？')"><p>在哪里看过医生吗？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('下了什么诊断吗？')"><p>下了什么诊断吗？</p></div></li>                                                       
+                                                        <li><div onclick="addQuestion('做过哪些检查？')"><p>做过哪些检查？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('检查结果如何？')"><p>检查结果如何？</p></div></li>
+                                                        <li><div onclick="addQuestion('给了什么治疗？')"><p>给了什么治疗？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('治疗效果如何？')"><p>治疗效果如何？</p></div></li>                                                       
+                                                        <li><div onclick="addQuestion('这段时间精神状态怎么样？')"><p>这段时间精神状态怎么样？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('出生后怎么喂养呢？')"><p>出生后怎么喂养呢？</p></div></li>
+                                                        <li><div onclick="addQuestion('吃的好吗？吃的量多吗？')"><p>吃的好吗？吃的量多吗？</p></div></li>                                                        
+                                                        <li><div onclick="addQuestion('体重增长了吗？')"><p>体重增长了吗？</p></div></li>  
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <div id="before" class="tab-pane">
+                                                <div class="panel-body">
+                                                    <div class="chat-discussion">
+                                                        <div class="column colmenu">
+                                                            <ul>
+                                                                <li><div onclick="addQuestion('宝宝有没有感冒或感染之类的？')"><p>宝宝有没有感冒或感染之类的？</p ></div></li>                                                        
+                                                                <li><div onclick="addQuestion('以前得过什么病吗？')"><p>以前得过什么病吗？</p ></div></li>                                                       
+                                                                <li><div onclick="addQuestion('做过什么手术吗？')"><p>做过什么手术吗？</p ></div></li>                                                        
+                                                                <li><div onclick="addQuestion('受过什么外伤吗？')"><p>受过什么外伤吗？</p ></div></li>
+                                                                <li><div onclick="addQuestion('手术什么时候做的，术后恢复怎么样？')"><p>手术什么时候做的，术后恢复怎么样？</p ></div></li>                                                        
+                                                                <li><div onclick="addQuestion('输过血吗？')"><p>输过血吗？</p ></div></li>                                                       
+                                                                <li><div onclick="addQuestion('疫苗接种情况？')"><p>疫苗接种情况？</p ></div></li>                                                        
+                                                                <li><div onclick="addQuestion('有无药物、食物过敏史？')"><p>有无药物、食物过敏史？</p ></div></li>
+                                                                <li><div onclick="addQuestion('感染过寄生虫吗？')"><p>感染过寄生虫吗？</p ></div></li>
+                                                                <li><div onclick="addQuestion('是否得过传染病？例如肝炎、结核病等？')"><p>是否得过传染病？例如肝炎、结核病等？</p ></div></li>
+                                                                
+                                                            </ul>
+                                                        </div>   
+                                                    </div>             
+                                                    
+                                                </div>
+                                            </div>
+                                            <div id="individual" class="tab-pane">
+                                                <div class="panel-body">
+                                                 <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addQuestion('近期到外地去过吗？')"><p>近期到外地去过吗？</p ></div></li>                                                        
+                                                        <li><div onclick="addQuestion('家里或产妇密切接触的人中有没有饲养宠物（如鸽子、猫狗等）？')"><p>家里或产妇密切接触的人中有没有饲养宠物（如鸽子、猫狗等）？</p ></div></li>                                                       
+                                                        <li><div onclick="addQuestion('近期接触过特殊的东西吗？（比如：发霉的东西、花粉、油烟及刺激性气味、或者平时接触过的物质）')"><p>近期接触过特殊的东西吗？（比如：发霉的东西、花粉、油烟及刺激性气味、或者平时接触过的物质）</p ></div></li>                                                        
+                                                        <li><div onclick="addQuestion('居住环境怎么样？有没有放射性或污染性物质？')"><p>居住环境怎么样？有没有放射性或污染性物质？</p ></div></li>
+                                                    </ul>
+                                                    </div>                                                       
+                                                    
+                                                </div>
+                                            </div>
+                                            <div id="family" class="tab-pane">
+                                                <div class="panel-body">
+                                                 <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addQuestion('家族中有没有什么遗传病呢？')"><p>家族中有没有什么遗传病呢？</p ></div></li>  
+                                                    </ul>
+                                                    </div>                                                       
+                                                    
+                                                </div>
+                                            </div>
+                                            <div id="marriage" class="tab-pane">
+                                                <div class="panel-body">
+                                                 <div class="column colmenu">
+                                                    <ul>
+                                                        
+                                                    </ul>
+                                                    </div>                                                       
+                                                    
+                                                </div>
+                                            </div>
+                                            <div id="gynecology" class="tab-pane">
+                                                <div class="panel-body">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        
+                                                    </ul>
+                                                    </div>                                                        
+                                                    
+                                                </div>
+                                            </div>
+                                            <div id="child" class="tab-pane">
+                                                <div class="panel-body">
+                                                    <div class="chat-discussion">
+                                                    <div class="column colmenu">
+                                                        <ul>
+                                                            <li><div onclick="addQuestion('父母的年龄是多少？')"><p>父母的年龄是多少？</p ></div></li>
+                                                            <li><div onclick="addQuestion('父母的职业？')"><p>父母的职业？</p ></div></li>                                                        
+                                                            <li><div onclick="addQuestion('父母的健康情况怎样？')"><p>父母的健康情况怎样？</p ></div></li>                                                       
+                                                            <li><div onclick="addQuestion('父母有没有梅毒、疱疹、衣原体等传染病史？')"><p>父母有没有梅毒、疱疹、衣原体等传染病史？</p ></div></li>                                                        
+                                                            <li><div onclick="addQuestion('父母是否近亲结婚？')"><p>父母是否近亲结婚？</p ></div></li>
+                                                            <li><div onclick="addQuestion('母亲有过流产史吗？')"><p>母亲有过流产史吗？</p ></div></li>                                                        
+                                                            <li><div onclick="addQuestion('母亲孕期有无感染性疾病史？')"><p>母亲孕期有无感染性疾病史？</p ></div></li>                                                       
+                                                            <li><div onclick="addQuestion('母亲孕期用过什么药物吗？临产前用过什么药物？')"><p>母亲孕期用过什么药物吗？临产前用过什么药物？</p ></div></li>                                                        
+                                                            <li><div onclick="addQuestion('母亲孕期定期做产检吗？在哪里做的？')"><p>母亲孕期定期做产检吗？在哪里做的？</p ></div></li>
+                                                            <li><div onclick="addQuestion('母亲孕期有没有胎膜早破的情况？')"><p>母亲孕期有没有胎膜早破的情况？</p ></div></li>                                                        
+                                                            <li><div onclick="addQuestion('母亲孕期产检有无高血压、糖尿病？')"><p>母亲孕期产检有无高血压、糖尿病？</p ></div></li>                                                       
+                                                            <li><div onclick="addQuestion('母亲孕期饮酒、吸烟吗？')"><p>母亲孕期饮酒、吸烟吗？</p ></div></li>                                                        
+                                                            <li><div onclick="addQuestion('宝宝在哪里出生的？')"><p>宝宝在哪里出生的？</p ></div></li>
+                                                            <li><div onclick="addQuestion('宝宝出生时情况是怎样？有没有窒息什么的？')"><p>宝宝出生时情况是怎样？有没有窒息什么的？</p ></div></li>                                                        
+                                                            <li><div onclick="addQuestion('宝宝出生后的Apgar评分是多少？')"><p>宝宝出生后的Apgar评分是多少？</p ></div></li>                                                       
+                                                            <li><div onclick="addQuestion('宝宝出生时是第几胎？第几产？')"><p>宝宝出生时是第几胎？第几产？</p ></div></li>                                                        
+                                                            <li><div onclick="addQuestion('宝宝出生时是否足月？')"><p>宝宝出生时是否足月？</p ></div></li>
+                                                            <li><div onclick="addQuestion('孩子出生时是顺产还是剖腹产？')"><p>孩子出生时是顺产还是剖腹产？</p ></div></li>                                                        
+                                                            <li><div onclick="addQuestion('孩子出生时体重？')"><p>孩子出生时体重？</p ></div></li>                                                       
+                                                            <li><div onclick="addQuestion('孩子脐带脱落情况？有没有渗血或化脓？')"><p>孩子脐带脱落情况？有没有渗血或化脓？</p ></div></li>                                                        
+                                                            <li><div onclick="addQuestion('运动、智力方面和同岁孩子一样吗？')"><p>运动、智力方面和同岁孩子一样吗？</p ></div></li>
+                                                            <li><div onclick="addQuestion('母亲是什么血型，宝宝又是什么血型知道吗？')"><p>母亲是什么血型，宝宝又是什么血型知道吗？</p ></div></li>
+                                                        </ul>
+                                                    </div>
+                                                    </div>                                                        
+                                                </div>
+                                            </div>
+                                        </div>
+                                
+
+                                <div class="ibox chat-view" style="width:400px;overflow-y:auto;">
+
+                                    <div class="ibox-title">
+                                        <strong>问诊过程</strong>
+                                    </div>
+
+
+                                    <div class="ibox-content">
+
+                                        <div class="row">
+
+                                            <div class="col-md-12 ">
+                                                <div class="chat-discussion" id="chat-discussion" style="width:400px;overflow-y:scroll;">
+
+                                                    
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+
+                                <div class="ibox chat-view" style="width:200px;">
+
+                                    <div class="ibox-title">
+                                        <strong>问诊记录</strong>
+                                    </div>
+
+
+                                    <div class="ibox-content">
+                                        <textarea class="form-control message-input" name="message" placeholder="医生自主笔记区域" style="min-height: 500px;width: 300px;resize: none;"></textarea>
+                                    </div>
+                                
+                                </div>
+
+
+                                <!-- <div class="col-md-12" style="width:200px">
+                                        <strong>问诊记录</strong>
+                                        <textarea class="form-control message-input" name="message" placeholder="医生自主笔记区域" style="min-height: 500px;width: 360px;resize: none;"></textarea>
+                                </div> -->
+                            
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div id="dg" style="z-index: 9999999; position: fixed ! important; right: 40px; bottom: 40px;">
+                <table width="100%" style="position: absolute; width:260px; right: 40px; bottom: 40px;">
+                    <button class="btn-primary btn-lg" onclick="jump_point()">结束训练</button>
+                </table>
+            </div>
+</div>
+
+ 
+<!-- 全局js -->
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/bootstrap.min.js?v=3.3.6"></script>
+
+
+
+    <!-- 自定义js -->
+    <script src="js/content.js?v=1.0.0"></script>
+    <script src="js/dictionary.js"></script>
+    
+
+
+</body>
+</html>

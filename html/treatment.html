@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> 主页面 </title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css?v=4.1.0" rel="stylesheet">
+
+    <script type="text/javascript">
+        var score = parseFloat(location.search.substring(1));
+        var treatment_gross_times = 0;
+        var treatment_level_times = 0;
+        var treatment_general_times = 0;
+        var treatment_food_times = 0;
+        var treatment_action_times = 0;
+        var asked = new Array();
+        window.onload = function(){   
+            if (window.sessionStorage) {   
+                var treatment_gross_times_tmp = parseInt(window.sessionStorage.getItem("treatment_gross_num"));
+                var asked_tmp = JSON.parse(window.sessionStorage.getItem("asked"));
+                treatment_level_times = window.sessionStorage.getItem("treatment_level_num"); 
+                treatment_general_times = window.sessionStorage.getItem("treatment_general_num"); 
+                treatment_food_times = window.sessionStorage.getItem("treatment_food_num"); 
+                treatment_action_times = window.sessionStorage.getItem("treatment_action_num");   
+                var div = document.getElementById("treatment-events"); 
+                div.innerHTML = window.sessionStorage.getItem("treatment_record");     
+            }
+            if(asked_tmp){
+                asked = asked_tmp;
+            }
+            if(treatment_gross_times_tmp){
+                treatment_gross_times = treatment_gross_times_tmp;
+            }
+        };
+
+        function saveToStorage(){
+            var treatment_record = document.getElementById("treatment-events").innerHTML;
+            window.sessionStorage.setItem("treatment_gross_num", treatment_gross_times);
+            window.sessionStorage.setItem("treatment_level_num", treatment_level_times);
+            window.sessionStorage.setItem("treatment_general_num", treatment_general_times);
+            window.sessionStorage.setItem("treatment_food_num", treatment_food_times);
+            window.sessionStorage.setItem("treatment_action_num", treatment_action_times);
+            window.sessionStorage.setItem("treatment_record", treatment_record);
+            window.sessionStorage.setItem("asked", JSON.stringify(asked));
+        }
+
+        function jump_patient_information(){
+            saveToStorage();
+            var goal = "patient_information.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_physical_examination(){
+            saveToStorage();
+            var goal = "physical_examination.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_auxiliary_examination(){
+            saveToStorage();
+            var goal = "auxiliary_examination.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_DDX(){
+            saveToStorage();
+            var goal = "DDX.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_primary_diagnosis(){
+            saveToStorage();
+            var goal = "primary_diagnosis.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_inquiry(){
+            saveToStorage();
+            var goal = "inquiry.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_point(){
+            saveToStorage();
+            var r = confirm("确定要结束训练吗？")
+            if(r==true){
+                var goal = "point.html?"+score;
+                window.location.href = goal;
+            }
+            
+        }
+        
+        function addTreatment(var1){
+            if(asked.includes(var1)){
+                alert("你已经检查过该项，不建议重复检查，可以查找之前的检查结果。");
+            }
+            else{
+                treatment_gross_times +=1;
+                if(treatment_gross_times<=times.find('treatment_gross')){
+                    asked.push(var1);
+                    var div = document.getElementById("treatment-events");
+                    var medicine = var1;
+                    div.innerHTML = div.innerHTML+"<li><p>"+medicine+"</p></li>";
+                    if(treatment_set.find(medicine))
+                        score += treatment_set.find(medicine);
+                }
+                else{
+                    alert("已经添加了10项治疗措施，不能继续添加。")
+                }
+            }
+        }
+
+        function check_treatment_general(){
+            treatment_general_times +=1;
+            if(treatment_general_times<=times.find('treatment_general') && treatment_gross_times<=times.find('treatment_gross')){
+                var obj = document.getElementsByName('treatment_general');
+
+                var add;
+                for(var i=0; i<obj.length; i++){
+                    if(obj[i].checked){
+                        add = obj[i].value;
+                    }
+                }
+                addTreatment(add);
+            }
+            else{
+                alert("只能添加一个护理常规");
+            }
+            
+        }
+        function check_treatment_action(){
+            treatment_action_times +=1;
+            if(treatment_action_times<=times.find('treatment_action') && treatment_gross_times<=times.find('treatment_gross')){
+                var obj = document.getElementsByName('treatment_action');
+
+                var add;
+                for(var i=0; i<obj.length; i++){
+                    if(obj[i].checked){
+                        add = obj[i].value;
+                    }
+                }
+                addTreatment(add);
+            }
+            else{
+                alert("只能选择一种体位");
+            }
+            
+        }
+        function check_treatment_level(){
+            treatment_level_times +=1;
+            if(treatment_level_times<=times.find('treatment_level') && treatment_gross_times<=times.find('treatment_gross')){
+                var obj = document.getElementsByName('treatment_level');
+
+                var add;
+                for(var i=0; i<obj.length; i++){
+                    if(obj[i].checked){
+                        add = obj[i].value;
+                    }
+                }
+                addTreatment(add);
+            }
+            else{
+                alert("只能添加一个护理等级");
+            }
+            
+        }
+        function check_treatment_food(){
+            treatment_food_times +=1;
+            if(treatment_food_times<=times.find('treatment_food') && treatment_gross_times<=times.find('treatment_gross')){
+                var obj = document.getElementsByName('treatment_food');
+
+                var add;
+                for(var i=0; i<obj.length; i++){
+                    if(obj[i].checked){
+                        add = obj[i].value;
+                    }
+                }
+                addTreatment(add);
+            }
+            else{
+                alert("只能选择一种膳食");
+            }
+            
+        }
+    </script>
+    
+
+
+</head>
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeIn">
+
+            <div class="col-sm-6">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs" style="width:1000px;">
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_patient_information()">患者信息</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_inquiry()">问诊</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_physical_examination()">体格检查</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_primary_diagnosis()">初步诊断</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_auxiliary_examination()">辅助检查</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_DDX()">确定诊断</button>
+                        </li>
+                        <li class="active"><a href="#treatment" aria-expanded="false">治疗</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="treatment" class="tab-pane active">
+                            <div class="panel-body-row">
+                                <div class="panel-body-row" style="width:500px">
+                                    <nav class="navbar-default navbar-static-side" role="navigation" style="width:200px;overflow:auto;">
+                                        <div class="nav-close"><i class="fa fa-times-circle"></i>
+                                        </div>
+                                        <div class="sidebar-collapse">
+                                            <ul class="nav nav-tabs nav-col" id="side-menu" style="overflow: auto">
+                                                <li class="nav-header">
+                                                    <div class="dropdown profile-element">
+                                                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                                            <span class="clear">
+                                                                <span class="block m-t-xs" style="font-size:20px;">
+                                                                    <strong class="font-bold">治疗项目</strong>
+                                                                </span>
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                </li>
+
+                                                <li class="active">
+                                                    <a data-toggle="tab" href="#treatment-general">
+                                                        <span class="nav-label">护理常规</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#treatment-level">
+                                                        <span class="nav-label">护理等级</span>
+                                                    </a>
+                                                </li>
+
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#food">
+                                                        <span class="nav-label">膳食</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#action">
+                                                        <span class="nav-label">体位</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#nursing">
+                                                        <span class="nav-label">护理措施</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#operation">
+                                                        <span class="nav-label">操作</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                        <a href="#">
+                                                            <span class="nav-label">治疗方式</span>
+                                                            <span class="fa arrow"></span>
+                                                        </a>
+                                                        <ul class="nav nav-second-level">
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#preserved-treatment">保守治疗</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#timed-surgery">择期手术</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#emergency-surgery">急诊手术</a>
+                                                            </li>
+                                                        </ul>
+                                                </li>
+                                                <li class="">
+                                                    <a data-toggle="tab" href="#medicine-treatment">
+                                                        <span class="nav-label">药物治疗</span>
+                                                    </a>
+                                                </li>
+                                                
+
+                                            </ul>
+                                        </div>
+                                    </nav>
+
+                                    <div class="tab-content" style="width:300px;overflow:auto;">
+                                        <div id="treatment-general" class="tab-pane active">
+                                            <div class="panel-body"                                                
+                                                <form>
+                                                    <input type="radio" name="treatment_general" value="内科护理常规"/>内科护理常规<br><br>
+                                                    <input type="radio" name="treatment_general" value="外科护理常规">外科护理常规<br><br>
+                                                    <input type="radio" name="treatment_general" value="儿科护理常规">儿科护理常规<br><br>
+                                                    <input type="radio" name="treatment_general" value="产科护理常规">产科护理常规<br><br>
+                                                    <input type="radio" name="treatment_general" value="妇科护理常规">妇科护理常规<br><br>
+                                                    <input type="radio" name="treatment_general" value="感染科护理常规">感染科护理常规<br><br>      
+                                                </form>
+                                                <button class="btn-primary btn-lg" onclick="check_treatment_general()" style="float:left; margin: 100px;">确定</button>
+                        
+                                            </div>
+                                        </div>
+                                        <div id="preserved-treatment" class="tab-pane">
+                                            <div class="panel-body">
+                                                
+                                            <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addTreatment('疝气带')"><p>疝气带</p></div></li>
+                                                    <li><div onclick="addTreatment('观察随诊')"><p>观察随诊</p></div></li>
+                                                </ul>
+                                            </div> 
+
+                                            </div>
+                                        </div>
+                                        <div id="timed-surgery" class="tab-pane">
+                                            <div class="panel-body">
+                                            <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addTreatment('腹腔镜下疝囊高位结扎术')"><p>腹腔镜下疝囊高位结扎术</p></div></li>
+                                                    <li><div onclick="addTreatment('腹腔镜下疝修补术')"><p>腹腔镜下疝修补术</p></div></li>
+                                                    <li><div onclick="addTreatment('无张力疝修补术')"><p>无张力疝修补术</p></div></li>
+                                                    <li><div onclick="addTreatment('传统疝气修补术')"><p>传统疝气修补术</p></div></li>
+                                                </ul>
+                                            </div> 
+
+                                            </div>
+                                        </div>
+                                        <div id="emergency-surgery" class="tab-pane">
+                                            <div class="panel-body">
+                                            <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addTreatment('疝囊复位')"><p>疝囊复位</p></div></li>
+                                                    <li><div onclick="addTreatment('腹腔镜下疝囊高位结扎术')"><p>腹腔镜下疝囊高位结扎术</p></div></li>
+                                                </ul>
+                                            </div> 
+
+                                            </div>
+                                        </div>
+                                        <div id="treatment-level" class="tab-pane">
+                                            <div class="panel-body">
+                                                <form>
+                                                    <input type="radio" name="treatment_level" value="特级护理"/>特级护理<br><br>
+                                                    <input type="radio" name="treatment_level" value="一级护理">一级护理<br><br>
+                                                    <input type="radio" name="treatment_level" value="二级护理">二级护理<br><br>
+                                                    <input type="radio" name="treatment_level" value="三级护理">三级护理<br><br>     
+                                                </form>
+                                                <button class="btn-primary btn-lg" onclick="check_treatment_level()" style="float:left; margin: 100px;">确定</button>
+
+                                            </div>
+                                        </div>
+                                        <div id="food" class="tab-pane" >
+                                            <div class="panel-body" >
+                                                <form>
+                                                    <input type="radio" name="treatment_food" value="普通饮食"/>普通饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="禁食"/>禁食<br><br>
+                                                    <input type="radio" name="treatment_food" value="禁饮"/>禁饮<br><br>
+                                                    <input type="radio" name="treatment_food" value="禁食水"/>禁食水<br><br>
+                                                    <input type="radio" name="treatment_food" value="管饲饮食"/>管饲饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="软质饮食"/>软质饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="半流质饮食"/>半流质饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="流质饮食"/>流质饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="糖尿病饮食"/>糖尿病饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="高热能饮食"/>高热能饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="高蛋白饮食"/>高蛋白饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="低蛋白饮食"/>低蛋白饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="优质蛋白饮食"/>优质蛋白饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="低钾饮食"/>低钾饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="低盐饮食"/>低盐饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="低脂肪饮食"/>低脂肪饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="低胆固醇饮食"/>低胆固醇饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="少渣或无渣饮食"/>少渣或无渣饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="高膳食纤维饮食"/>高膳食纤维饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="低嘌呤饮食"/>低嘌呤饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="高铁食物饮食"/>高铁食物饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="高叶酸饮食"/>高叶酸饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="低铜饮食"/>低铜饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="胆囊造影饮食"/>胆囊造影饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="隐血实验饮食"/>隐血实验饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="肌酐实验饮食"/>肌酐实验饮食<br><br>
+                                                    <input type="radio" name="treatment_food" value="甲状腺131实验饮食"/>甲状腺131实验饮食<br><br>
+
+                                                </form>   
+                                                 <button class="btn-primary btn-lg" onclick="check_treatment_food()" style="float:left; margin: 100px;">确定</button>
+ 
+                                            </div>
+                                        </div>
+                                        <div id="action" class="tab-pane">
+                                            <div class="panel-body">
+                                                <form>
+                                            <input type="radio" name="treatment_action" value="自由体位"/>自由体位<br><br>
+                                            <input type="radio" name="treatment_action" value="卧床休息"/>卧床休息<br><br>
+                                            <input type="radio" name="treatment_action" value="半卧位"/>半卧位<br><br>
+                                            <input type="radio" name="treatment_action" value="坐位"/>坐位<br><br>
+                                            <input type="radio" name="treatment_action" value="头高脚低位"/>头高脚低位<br><br>
+                                            <input type="radio" name="treatment_action" value="绝对卧床"/>绝对卧床<br><br>
+                                            <input type="radio" name="treatment_action" value="限制活动"/>限制活动<br><br>
+                                            <input type="radio" name="treatment_action" value="避免剧烈活动"/>避免剧烈活动<br><br>
+                                            <input type="radio" name="treatment_action" value="自由活动"/>自由活动<br><br>
+                                            <input type="radio" name="treatment_action" value="胸膝卧位"/>胸膝卧位<br><br>
+                                            <input type="radio" name="treatment_action" value="侧卧位"/>侧卧位<br><br>
+                                            <input type="radio" name="treatment_action" value="左侧卧位"/>左侧卧位<br><br>
+                                            <input type="radio" name="treatment_action" value="右侧卧位"/>右侧卧位<br><br>
+                                            <input type="radio" name="treatment_action" value="健侧卧位"/>健侧卧位<br><br>
+                                            <input type="radio" name="treatment_action" value="患侧卧位"/>患侧卧位<br><br>
+                                            </form>
+                                            <button class="btn-primary btn-lg" onclick="check_treatment_action()" style="float:left; margin: 100px;">确定</button>
+
+                                            </div>
+                                        </div>
+                                        <div id="nursing" class="tab-pane">
+                                            <div class="panel-body">
+                                            <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addTreatment('吸氧')"><p>吸氧</p></div></li>
+                                                    <li><div onclick="addTreatment('吸痰')"><p>吸痰</p></div></li>
+                                                    <li><div onclick="addTreatment('心电监护')"><p>心电监护</p></div></li>
+                                                    <li><div onclick="addTreatment('记出入量')"><p>记出入量</p></div></li>
+                                                    <li><div onclick="addTreatment('测体温')"><p>测体温</p></div></li>
+                                                    <li><div onclick="addTreatment('测血压')"><p>测血压</p></div></li>
+                                                    <li><div onclick="addTreatment('测血氧')"><p>测血氧</p></div></li>
+                                                    <li><div onclick="addTreatment('测血糖')"><p>测血糖</p></div></li>
+                                                    <li><div onclick="addTreatment('测脉搏')"><p>测脉搏</p></div></li>
+                                                    <li><div onclick="addTreatment('测呼吸')"><p>测呼吸</p></div></li>
+                                                    <li><div onclick="addTreatment('测瞳孔')"><p>测瞳孔</p></div></li>
+                                                    <li><div onclick="addTreatment('测体重')"><p>测体重</p></div></li>
+                                                    <li><div onclick="addTreatment('留置导尿管')"><p>留置导尿管</p></div></li>
+                                                    <li><div onclick="addTreatment('记尿量')"><p>记尿量</p></div></li>
+                                                    <li><div onclick="addTreatment('防自伤')"><p>防自伤</p></div></li>
+                                                    <li><div onclick="addTreatment('持续低流量给氧')"><p>持续低流量给氧</p></div></li>
+                                                    <li><div onclick="addTreatment('置入胃管')"><p>置入胃管</p></div></li>
+                                                    <li><div onclick="addTreatment('留置胃管')"><p>留置胃管</p></div></li>
+                                                    <li><div onclick="addTreatment('胃肠减压')"><p>胃肠减压</p></div></li>
+                                                    <li><div onclick="addTreatment('青霉素皮试')"><p>青霉素皮试</p></div></li>
+                                                    <li><div onclick="addTreatment('头孢皮试')"><p>头孢皮试</p></div></li>
+                                                    <li><div onclick="addTreatment('备皮')"><p>备皮</p></div></li>
+                                                    <li><div onclick="addTreatment('胎心监护')"><p>胎心监护</p></div></li>
+                                                    <li><div onclick="addTreatment('导尿')"><p>导尿</p></div></li>
+                                                    <li><div onclick="addTreatment('灌肠')"><p>灌肠</p></div></li>
+                                                    <li><div onclick="addTreatment('物理降温')"><p>物理降温</p></div></li>
+                                                </ul>
+                                            </div>                
+                                                
+                                            </div>
+                                        </div>
+                                        <div id="operation" class="tab-pane">
+                                            <div class="panel-body">
+                                             <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addTreatment('骨髓穿刺术')"><p>骨髓穿刺术</p></div></li>
+                                                    <li><div onclick="addTreatment('胸腔穿刺术抽气')"><p>胸腔穿刺术抽气</p></div></li>
+                                                    <li><div onclick="addTreatment('胸腔穿刺术抽液')"><p>胸腔穿刺术抽液</p></div></li>
+                                                    <li><div onclick="addTreatment('胸腔穿刺闭式引流术')"><p>胸腔穿刺闭式引流术</p></div></li>
+                                                    <li><div onclick="addTreatment('清创术')"><p>清创术</p></div></li>
+                                                    <li><div onclick="addTreatment('清创缝合术')"><p>清创缝合术</p></div></li>
+                                                    <li><div onclick="addTreatment('换药术')"><p>换药术</p></div></li>
+                                                    <li><div onclick="addTreatment('静脉置管术')"><p>静脉置管术</p></div></li>
+                                                    <li><div onclick="addTreatment('气管插管术')"><p>气管插管术</p></div></li>
+                                                    <li><div onclick="addTreatment('输血')"><p>输血</p></div></li>
+                                                    <li><div onclick="addTreatment('心肺复苏术')"><p>心肺复苏术</p></div></li>
+                                                    <li><div onclick="addTreatment('胸腔穿刺术抽液')"><p>胸腔穿刺术抽液</p></div></li>
+                                                    <li><div onclick="addTreatment('胸腔穿刺引流术')"><p>胸腔穿刺引流术</p></div></li>
+                                                    <li><div onclick="addTreatment('鼻、咽部异物取出')"><p>鼻、咽部异物取出</p></div></li>
+                                                    <li><div onclick="addTreatment('输血')"><p>输血</p></div></li>
+                                                    <li><div onclick="addTreatment('心肺复苏术')"><p>心肺复苏术</p></div></li>
+                                                    <li><div onclick="addTreatment('康复理疗（次）')"><p>康复理疗（次）</p></div></li>
+                                                    <li><div onclick="addTreatment('洗胃术')"><p>洗胃术</p></div></li>
+                                                    <li><div onclick="addTreatment('外耳道冲洗')"><p>外耳道冲洗</p></div></li>
+                                                    <li><div onclick="addTreatment('外耳道异物取出')"><p>外耳道异物取出</p></div></li>
+                                                    <li><div onclick="addTreatment('外耳道疖，瘘管切开排放')"><p>外耳道疖，瘘管切开排放</p></div></li>
+                                                    <li><div onclick="addTreatment('小脓肿切开引流术')"><p>小脓肿切开引流术</p></div></li>
+                                                    <li><div onclick="addTreatment('拔甲术')"><p>拔甲术</p></div></li>
+                                                    <li><div onclick="addTreatment('小抢救')"><p>小抢救</p></div></li>
+                                                    <li><div onclick="addTreatment('熏洗疗法')"><p>熏洗疗法</p></div></li>
+                                                    <li><div onclick="addTreatment('心脏电除颤')"><p>心脏电除颤</p></div></li>
+                                                    <li><div onclick="addTreatment('关节脱位/半脱位手法复位')"><p>关节脱位/半脱位手法复位</p></div></li>
+                                                    <li><div onclick="addTreatment('骨折手法复位')"><p>骨折手法复位</p></div></li>
+                                                    <li><div onclick="addTreatment('骨折小夹板固定')"><p>骨折小夹板固定</p></div></li>
+                                                    <li><div onclick="addTreatment('绷带固定')"><p>绷带固定</p></div></li>
+                                                    <li><div onclick="addTreatment('腰椎穿刺术')"><p>腰椎穿刺术</p></div></li>
+                                                    <li><div onclick="addTreatment('膀胱冲洗')"><p>膀胱冲洗</p></div></li>
+                                                    <li><div onclick="addTreatment('骨盆牵引')"><p>骨盆牵引</p></div></li>
+                                                    <li><div onclick="addTreatment('扁桃体周围脓肿切开排脓')"><p>扁桃体周围脓肿切开排脓</p></div></li>
+                                                    <li><div onclick="addTreatment('一般封闭')"><p>一般封闭</p></div></li>
+                                                    <li><div onclick="addTreatment('颈椎牵引')"><p>颈椎牵引</p></div></li>
+                                                    <li><div onclick="addTreatment('针灸治疗')"><p>针灸治疗</p></div></li>
+                                                    <li><div onclick="addTreatment('大抢救')"><p>大抢救</p></div></li>
+                                                    <li><div onclick="addTreatment('鼻腔血管封闭')"><p>鼻腔血管封闭</p></div></li>
+                                                    <li><div onclick="addTreatment('麦粒肿切开排脓')"><p>麦粒肿切开排脓</p></div></li>
+                                                    <li><div onclick="addTreatment('进口玻璃离子填充')"><p>进口玻璃离子填充</p></div></li>
+                                                    <li><div onclick="addTreatment('推拿按摩')"><p>推拿按摩</p></div></li>
+                                                    <li><div onclick="addTreatment('开髓引流[口腔]')"><p>开髓引流[口腔]</p></div></li>
+                                                    <li><div onclick="addTreatment('泪道冲洗')"><p>泪道冲洗</p></div></li>
+                                                    <li><div onclick="addTreatment('泪道探通')"><p>泪道探通</p></div></li>
+                                                    <li><div onclick="addTreatment('冠周冲洗[口腔]')"><p>冠周冲洗[口腔]</p></div></li>
+                                                    <li><div onclick="addTreatment('物理治疗')"><p>物理治疗</p></div></li>
+                                                    <li><div onclick="addTreatment('切开引流')"><p>切开引流</p></div></li>
+                                                    <li><div onclick="addTreatment('皮牵引')"><p>皮牵引</p></div></li>
+                                                    <li><div onclick="addTreatment('环甲膜切开术')"><p>环甲膜切开术</p></div></li>
+                                                    <li><div onclick="addTreatment('高压氧舱治疗')"><p>高压氧舱治疗</p></div></li>
+                                                    <li><div onclick="addTreatment('肾脏穿刺活检术')"><p>肾脏穿刺活检术</p></div></li>
+                                                    <li><div onclick="addTreatment('呼吸机辅助通气')"><p>呼吸机辅助通气</p></div></li>
+
+                                                </ul>
+                                                </div>                                                       
+                                                
+                                            </div>
+                                        </div>
+
+                                        <div id="medicine-treatment" class="tab-pane">
+                                            <div class="panel-body">
+                                            <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addTreatment('预防性抗生素治疗')"><p>预防性抗生素治疗</p></div></li>
+                                                    <li><div onclick="addTreatment('抗炎治疗')"><p>抗炎治疗</p></div></li>
+                                                </ul>
+                                            </div> 
+
+                                            </div>
+                                        </div>
+
+                                    </div> 
+                                </div>
+                                <div class="column">
+                                    <br><br><br><br><br>
+                                <div style="text-decoration: none;color: #000;background: #ffc;display: block;height: 150px;width: 150px;padding: 15px;position: relative;margin-right:50px;margin-left:100px;">
+                                    <h4>注意：</h4><p>选择的治疗措施不能超过10个，其中 护理常规、护理等级、膳食、体位 每个只能选一项</p>
+                                    
+                                </div>
+                                </div>
+
+
+                                <div class="ibox chat-view" style="width:250px">
+
+                                    <div class="ibox-title">
+                                        <strong>治疗计划</strong>
+                                    </div>
+
+                                    <div class="column colmenu">
+                                        <ul id="treatment-events">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="dg" style="z-index: 9999999; position: fixed ! important; right: 40px; bottom: 40px;">
+                <table width="100%" style="z-index: 9999;position: absolute; width:260px; right: 40px; bottom: 40px;">
+                    <button class="btn-primary btn-lg" style="z-index: 9999;" onclick="jump_point()">结束训练</button>
+                </table>
+            </div>
+
+</div>
+
+ 
+<!-- 全局js -->
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="js/plugins/layer/layer.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="js/hAdmin.js?v=4.1.0"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script src="js/dictionary.js"></script>
+
+    <!-- 第三方插件 -->
+    <script src="js/plugins/pace/pace.min.js"></script>
+    
+
+
+</body>
+</html>

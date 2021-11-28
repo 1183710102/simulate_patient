@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> 主页面 </title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css?v=4.1.0" rel="stylesheet">
+
+    <script type="text/javascript">
+        var score = parseFloat(location.search.substring(1));
+        var DDX_no = 0;
+        window.onload = function(){   
+            if (window.sessionStorage) {    
+                var DDX_no_tmp = parseInt(window.sessionStorage.getItem("DDX_no"));
+                var div = document.getElementById("examinated-diseases"); 
+                div.innerHTML = window.sessionStorage.getItem("DDX_record");     
+            }
+            if(DDX_no_tmp){
+                DDX_no = DDX_no_tmp;
+            }
+        };
+
+        function saveToStorage(){
+            var DDX_record = document.getElementById("examinated-diseases").innerHTML;
+            window.sessionStorage.setItem("DDX_record", DDX_record);
+            window.sessionStorage.setItem("DDX_no", DDX_no);
+        }
+
+        function jump_patient_information(){
+            saveToStorage();
+            var goal = "patient_information.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_physical_examination(){
+            saveToStorage();
+            var goal = "physical_examination.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_primary_diagnosis(){
+            saveToStorage();
+            var goal = "primary_diagnosis.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_auxiliary_examination(){
+            saveToStorage();
+            var goal = "auxiliary_examination.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_inquiry(){
+            saveToStorage();
+            var goal = "inquiry.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_treatment(){
+            saveToStorage();
+            var goal = "treatment.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_point(){
+            saveToStorage();
+            var r = confirm("确定要结束训练吗？")
+            if(r==true){
+                var goal = "point.html?"+score;
+                window.location.href = goal;
+            }
+            
+        }
+        
+        function addDisease(){
+            DDX_no += 1;
+            if(DDX_no <= times.find('DDX_no')){
+                var div = document.getElementById("examinated-diseases");
+                var name = document.getElementById("disease").value;
+                
+                div.innerHTML = div.innerHTML+"<li><p>"+name+"</p></li>";
+                if (diagnosis.find(name)) {
+                    score += diagnosis.find(name);}
+            }
+            else{
+                alert("确诊数目已达上限");
+            }
+        }
+    </script>
+    
+
+
+</head>
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeIn">
+
+            <div class="col-sm-6">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs" style="width:1000px;">
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_patient_information()">患者信息</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_inquiry()">问诊</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_physical_examination()">体格检查</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_primary_diagnosis()">初步诊断</button>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_auxiliary_examination()">辅助检查</button>
+                        </li>
+                        <li class="active"><a href="#DDX" aria-expanded="false">确定诊断</a>
+                        </li>
+                        <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_treatment()">治疗</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="DDX" class="tab-pane active">
+                            <div class="panel-body">
+                            <div class="crosswise" style="margin-right:50px;margin-left:50px;"> 
+                                <div style="float:left;">
+                                    确诊病名:<input id="disease" type="text" >
+                                    <button class="btn-primary btn-sm" onclick="addDisease()">确诊</button>
+                                    <br><br><br>
+                                
+                                <div class="ibox chat-view" style="width:250px">
+
+                                    <div class="ibox-title">
+                                        <strong>检查记录</strong>
+                                    </div>
+
+                                    <div class="column colmenu">
+                                        <ul id="examinated-diseases">
+                                        </ul>
+                                    </div>
+                                </div>
+                                </div>
+                                <div style="text-decoration: none;color: #000;background: #ffc;display: block;height: 100px;width: 100px;padding: 15px;position: relative;margin-right:50px;margin-left:100px;">
+                                    
+                                    <h4>确诊病名只能填写一个</h4>
+                                    
+                                </div>
+
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+            <div id="dg" style="z-index: 9999999; position: fixed ! important; right: 40px; bottom: 40px;">
+                <table width="100%" style="position: absolute; width:260px; right: 40px; bottom: 40px;">
+                    <button class="btn-primary btn-lg" onclick="jump_point()">结束训练</button>
+                </table>
+            </div>
+
+</div>
+
+ 
+<!-- 全局js -->
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/bootstrap.min.js?v=3.3.6"></script>
+
+
+
+    <!-- 自定义js -->
+    <script src="js/content.js?v=1.0.0"></script>
+    <script src="js/dictionary.js"></script>
+    
+
+
+</body>
+</html>

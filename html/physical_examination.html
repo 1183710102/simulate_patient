@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> 主页面 </title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css?v=4.1.0" rel="stylesheet">
+
+    <script type="text/javascript">
+        var score = parseFloat(location.search.substring(1));
+        var physical_no = 0;
+        var asked = new Array();
+        window.onload = function(){   
+            if (window.sessionStorage) {   
+                var physical_no_tmp = parseInt(window.sessionStorage.getItem("physical_num")); 
+                var asked_tmp = JSON.parse(window.sessionStorage.getItem("asked"));
+                var div = document.getElementById("examinated-events"); 
+                div.innerHTML = window.sessionStorage.getItem("physical_record");     
+            }
+            if(asked_tmp){
+                asked = asked_tmp;
+            }
+            if(physical_no_tmp){
+                physical_no = physical_no_tmp;
+            }
+        };
+
+        function saveToStorage(){
+            var physical_num = physical_no;
+            var physical_record = document.getElementById("examinated-events").innerHTML;
+            window.sessionStorage.setItem("physical_num", physical_num);
+            window.sessionStorage.setItem("physical_record", physical_record);
+            window.sessionStorage.setItem("asked", JSON.stringify(asked));
+        }
+
+        function jump_patient_information(){
+            saveToStorage();
+            var goal = "patient_information.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_inquiry(){
+            saveToStorage();
+            var goal = "inquiry.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_auxiliary_examination(){
+            saveToStorage();
+            var goal = "auxiliary_examination.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_DDX(){
+            saveToStorage();
+            var goal = "DDX.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_primary_diagnosis(){
+            saveToStorage();
+            var goal = "primary_diagnosis.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_treatment(){
+            saveToStorage();
+            var goal = "treatment.html?"+score;
+            window.location.href = goal;
+        }
+        
+        function jump_point(){
+            saveToStorage();
+            var r = confirm("确定要结束训练吗？")
+            if(r==true){
+                var goal = "point.html?"+score;
+                window.location.href = goal;
+            }
+            
+        }
+        
+
+        function addExamination(var1){
+            if(asked.includes(var1)){
+                alert("你已经检查过该项，不建议重复检查，可以查找之前的检查结果。");
+            }
+            else{
+                physical_no +=1;
+                if(physical_no<=times.find('physical_no')){
+                    asked.push(var1);
+                    var div = document.getElementById("examinated-events");
+                    var result = quary_set.find(var1).answer;
+                    div.innerHTML = div.innerHTML+"<li><p>"+var1+" : "+result+"</p></li>";
+                    score += quary_set.find(var1).score;
+                }
+                else{
+                    alert("体格检查数目已达上限");
+                }
+            }
+        }
+    </script>
+    
+
+
+</head>
+<body class="full-height-layout gray-bg">
+
+    <div class="wrapper wrapper-content animated fadeIn">
+
+                <div class="col-sm-12">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs" style="width:1000px;">
+                            <li class="">
+                                <button class="btn-primary btn-lg" onclick="jump_patient_information()">患者信息</button>
+                            </li>
+                            <li class="">
+                                <button class="btn-primary btn-lg" onclick="jump_inquiry()">问诊</button>
+                            </li>
+                            <li class="active"><a href="#physical-examination" aria-expanded="true"> 体格检查</a>
+                            </li>
+                            <li class="">
+                            <button class="btn-primary btn-lg" onclick="jump_primary_diagnosis()">初步诊断</button>
+                            </li>
+                            <li class="">
+                                <button class="btn-primary btn-lg" onclick="jump_auxiliary_examination()">辅助检查</button>
+                            </li>
+                            <li class="">
+                                <button class="btn-primary btn-lg" onclick="jump_DDX()">确定诊断</button>
+                            </li>
+                            <li class="">
+                                <button class="btn-primary btn-lg" onclick="jump_treatment()">治疗</button>
+                            </li>
+                        </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div id="physical-examination" class="tab-pane active">
+                                
+                                <div class="panel-body-row">
+                                    
+                                    
+                                
+                                        <!--左侧导航开始-->
+                                        <nav class="navbar-default navbar-static-side" role="navigation" style="width:150px;overflow:auto;">
+                                            <div class="nav-close"><i class="fa fa-times-circle"></i>
+                                            </div>
+                                            <div class="sidebar-collapse">
+                                                <ul class="nav nav-tabs" id="side-menu" style="overflow: auto">
+                                                    <li class="nav-header">
+                                                        <div class="dropdown profile-element">
+                                                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                                                <span class="clear">
+                                                                    <span class="block m-t-xs" style="font-size:20px;">
+                                                                        <strong class="font-bold">检查项目</strong>
+                                                                    </span>
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                    </li>
+
+                                                    <li class="active">
+                                                        <a data-toggle="tab" href="#life-signs">
+                                                            <span class="nav-label">生命体征</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#general-situation">
+                                                            <span class="nav-label">一般情况查体</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#lymph-gland">
+                                                            <span class="nav-label">淋巴结</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="nav-label">头部</span>
+                                                            <span class="fa arrow"></span>
+                                                        </a>
+                                                        <ul class="nav nav-second-level">
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#head-visual">视诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#head-palpation">触诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#visual-chart">视力表</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#eyemovement">眼球运动</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#reflect">集合反射</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#ophthalmoscope">检眼镜</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#head-flashlight">手电筒</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#otoscope">检耳镜</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#pitchfork">音叉</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#head-smelling">嗅诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#tongue-depressor">压舌板</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#head-act">做动作</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="nav-label">颈部</span>
+                                                            <span class="fa arrow"></span>
+                                                        </a>
+                                                        <ul class="nav nav-second-level">
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#neck-visual">视诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#neck-hearing">听诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#neck-palpation">触诊</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="nav-label">胸部</span>
+                                                            <span class="fa arrow"></span>
+                                                        </a>
+                                                        <ul class="nav nav-second-level">
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#chest-visual">视诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#chest-palpation">触诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#chest-percusion">叩诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#chest-hearing">听诊</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="nav-label">腹部</span>
+                                                            <span class="fa arrow"></span>
+                                                        </a>
+                                                        <ul class="nav nav-second-level">
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#belly-visual">视诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#belly-hearing">听诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#belly-percussion">叩诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#belly-palpation">触诊</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="nav-label">生殖器、肛门、直肠</span>
+                                                            <span class="fa arrow"></span>
+                                                        </a>
+                                                        <ul class="nav nav-second-level">
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#genital-visual">视诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#genital-palpation">触诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#genital-finger">指诊</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="nav-label">脊柱四肢</span>
+                                                            <span class="fa arrow"></span>
+                                                        </a>
+                                                        <ul class="nav nav-second-level">
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#extremities-visual">视诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#extremities-palpation">触诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#extremities-percussion">叩诊</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#muscle-force">肌力</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#muscular-tension">肌张力</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="nav-label">神经系统检查</span>
+                                                            <span class="fa arrow"></span>
+                                                        </a>
+                                                        <ul class="nav nav-second-level">
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#neurological-swab">棉签</a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a data-toggle="tab" href="#neurological-percussion">叩诊锤</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#other-neurological">
+                                                            <span class="nav-label">其他神经系统检查</span>
+                                                        </a>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </nav>
+                                        <!--左侧导航结束-->
+                                        <div class="tab-content"  style="width:300px">
+                                            <div id="life-signs" class="tab-pane active" >
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                <ul>
+                                                    <li><div onclick="addExamination('体温')"><p>体温</p></div></li>
+                                                    <li><div onclick="addExamination('脉搏')"><p>脉搏</p></div></li>
+                                                    <li><div onclick="addExamination('呼吸')"><p>呼吸</p></div></li>
+                                                    <li><div onclick="addExamination('血压')"><p>血压</p></div></li>
+                                                    <li><div onclick="addExamination('体重')"><p>体重</p></div></li>
+                                                    <li><div onclick="addExamination('身高')"><p>身高</p></div></li>
+                                                </ul>
+                                                </div>      
+                                                </div>
+                                            </div>
+                                            <div id="general-situation" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('发育与体型')"><p>发育与体型</p></div></li>
+                                                        <li><div onclick="addExamination('营养状态')"><p>营养状态</p></div></li>
+                                                        <li><div onclick="addExamination('意识状态')"><p>意识状态</p></div></li>
+                                                        <li><div onclick="addExamination('语调与语态')"><p>语调与语态</p></div></li>
+                                                        <li><div onclick="addExamination('面容与表情')"><p>面容与表情</p></div></li>
+                                                        <li><div onclick="addExamination('体位')"><p>体位</p></div></li>
+                                                        <li><div onclick="addExamination('姿势及步态')"><p>姿势及步态</p></div></li>
+                                                        <li><div onclick="addExamination('皮肤')"><p>皮肤</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="lymph-gland" class="tab-pane">
+                                                <div class="panel-body">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('全身')"><p>全身</p></div></li>
+                                                    </ul>
+                                                </div>                
+                                                    
+                                                </div>
+                                            </div>
+
+                                            <div id="head-visual" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('头（头发区域）-视诊')"><p>头（头发区域）</p></div></li>
+                                                        <li><div onclick="addExamination('双眼-视诊')"><p>双眼</p></div></li>
+                                                        <li><div onclick="addExamination('双耳-视诊')"><p>双耳</p></div></li>
+                                                        <li><div onclick="addExamination('鼻-视诊')"><p>鼻</p></div></li>
+                                                        <li><div onclick="addExamination('口-视诊')"><p>口</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="head-palpation" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('头（头发区域）-触诊')"><p>头（头发区域）</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="visual-chart" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('双眼-视力表')"><p>双眼</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="eyemovement" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('双眼-眼球运动')"><p>双眼</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="reflect" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('双眼-集合反射')"><p>双眼</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="ophthalmoscope" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('双眼-检眼镜')"><p>双眼</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="head-flashlight" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('左眼-手电筒')"><p>左眼</p></div></li>
+                                                        <li><div onclick="addExamination('右眼-手电筒')"><p>右眼</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="otoscope" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('双耳-检耳镜')"><p>双耳</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="pitchfork" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('双耳-音叉')"><p>双耳</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="head-smelling" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('口-嗅诊')"><p>口</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="tongue-depressor" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('口-压舌板')"><p>口</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="head-act" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('面部-做动作')"><p>面部</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="neck-visual" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('颈部-视诊')"><p>颈部</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="neck-hearing" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('颈动脉区-听诊')"><p>颈动脉区</p></div></li>
+                                                        <li><div onclick="addExamination('甲状腺区-听诊')"><p>甲状腺区</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="neck-palpation" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('甲状腺区-触诊')"><p>甲状腺区</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="chest-visual" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('胸部-视诊')"><p>胸部</p></div></li>
+                                                        <li><div onclick="addExamination('乳房-视诊')"><p>乳房</p></div></li>
+                                                        <li><div onclick="addExamination('心前区-视诊')"><p>心前区</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="chest-palpation" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('胸部-触诊')"><p>胸部</p></div></li>
+                                                        <li><div onclick="addExamination('乳房-触诊')"><p>乳房</p></div></li>
+                                                        <li><div onclick="addExamination('心前区-触诊')"><p>心前区</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="chest-percusion" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('胸部-叩诊')"><p>胸部</p></div></li>
+                                                        <li><div onclick="addExamination('心前区-叩诊')"><p>心前区</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="chest-hearing" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('左肺尖-听诊')"><p>左肺尖</p></div></li>
+                                                        <li><div onclick="addExamination('右肺尖-听诊')"><p>右肺尖</p></div></li>
+                                                        <li><div onclick="addExamination('左前胸-听诊')"><p>左前胸</p></div></li>
+                                                        <li><div onclick="addExamination('右前胸-听诊')"><p>右前胸</p></div></li>
+                                                        <li><div onclick="addExamination('左侧胸-听诊')"><p>左侧胸</p></div></li>
+                                                        <li><div onclick="addExamination('右侧胸-听诊')"><p>右侧胸</p></div></li>
+                                                        <li><div onclick="addExamination('左上背部-听诊')"><p>左上背部</p></div></li>
+                                                        <li><div onclick="addExamination('右上背部-听诊')"><p>右上背部</p></div></li>
+                                                        <li><div onclick="addExamination('左下背部-听诊')"><p>左下背部</p></div></li>
+                                                        <li><div onclick="addExamination('右下背部-听诊')"><p>右下背部</p></div></li>
+                                                        <li><div onclick="addExamination('二尖瓣听诊区-听诊')"><p>二尖瓣听诊区</p></div></li>
+                                                        <li><div onclick="addExamination('肺动脉瓣听诊区-听诊')"><p>肺动脉瓣听诊区</p></div></li>
+                                                        <li><div onclick="addExamination('主动脉瓣听诊区-听诊')"><p>主动脉瓣听诊区</p></div></li>
+                                                        <li><div onclick="addExamination('主动脉瓣第二听诊区-听诊')"><p>主动脉瓣第二听诊区</p></div></li>
+                                                        <li><div onclick="addExamination('三尖瓣听诊区-听诊')"><p>三尖瓣听诊区</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="belly-visual" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('腹部-视诊')"><p>腹部</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="belly-hearing" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('腹部-听诊')"><p>腹部</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="belly-percussion" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('腹部-叩诊')"><p>腹部</p></div></li>
+                                                        <li><div onclick="addExamination('肋脊角-叩诊')"><p>肋脊角</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="belly-palpation" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('腹部-触诊')"><p>腹部</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="genital-visual" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('男生殖器-视诊')"><p>男生殖器</p></div></li>
+                                                        <li><div onclick="addExamination('肛门-视诊')"><p>肛门</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="genital-palpation" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('男生殖器-触诊')"><p>男生殖器</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="genital-finger" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('肛门-指诊')"><p>肛门</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="extremities-visual" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('脊柱-视诊')"><p>脊柱</p></div></li>
+                                                        <li><div onclick="addExamination('双上肢-视诊')"><p>双上肢</p></div></li>
+                                                        <li><div onclick="addExamination('双下肢-视诊')"><p>双下肢</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="extremities-palpation" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('脊柱-触诊')"><p>脊柱</p></div></li>
+                                                        <li><div onclick="addExamination('双上肢-触诊')"><p>双上肢</p></div></li>
+                                                        <li><div onclick="addExamination('双下肢-触诊')"><p>双下肢</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="extremities-percussion" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('脊柱-叩诊')"><p>脊柱</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="muscle-force" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('四肢-肌力')"><p>四肢</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="muscular-tension" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('四肢-肌张力')"><p>四肢</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="neurological-swab" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('双眼-棉签')"><p>双眼</p></div></li>
+                                                        <li><div onclick="addExamination('腹部-棉签')"><p>腹部</p></div></li>
+                                                        <li><div onclick="addExamination('双足-棉签')"><p>双足</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            <div id="neurological-percussion" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('双肘-叩诊锤')"><p>双肘</p></div></li>
+                                                        <li><div onclick="addExamination('双膝-叩诊锤')"><p>双膝</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="other-neurological" class="tab-pane">
+                                                <div class="panel-body" style="width:300px">
+                                                <div class="column colmenu">
+                                                    <ul>
+                                                        <li><div onclick="addExamination('其他浅反射')"><p>其他浅反射</p></div></li>
+                                                        <li><div onclick="addExamination('其他深反射')"><p>其他深反射</p></div></li>
+                                                        <li><div onclick="addExamination('脑膜刺激征')"><p>脑膜刺激征</p></div></li>
+                                                        <li><div onclick="addExamination('共济检查')"><p>共济检查</p></div></li>
+                                                        <li><div onclick="addExamination('浅感觉')"><p>浅感觉</p></div></li>
+                                                        <li><div onclick="addExamination('深感觉')"><p>深感觉</p></div></li>
+                                                        <li><div onclick="addExamination('复合感觉')"><p>复合感觉</p></div></li>
+                                                    </ul>
+                                                </div> 
+                                                </div>
+                                            </div>
+
+                                        </div>                                                                        
+                                    
+
+                                    <div class="ibox chat-view" style="width:400px;overflow:auto;">
+
+                                        <div class="ibox-title">
+                                            <strong>检查记录</strong>
+                                        </div>
+
+
+                                        <div class="column colmenu" style="overflow:auto;">
+                                            <ul id="examinated-events">
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="dg" style="z-index: 9999999; position: fixed ! important; right: 40px; bottom: 40px;">
+                <table width="100%" style="position: absolute; width:260px; right: 40px; bottom: 40px;">
+                    <button class="btn-primary btn-lg" onclick="jump_point()">结束训练</button>
+                </table>
+                </div>
+    </div>
+
+
+ 
+    <!-- 全局js -->
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="js/plugins/layer/layer.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="js/hAdmin.js?v=4.1.0"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script src="js/dictionary.js"></script>
+
+    <!-- 第三方插件 -->
+    <script src="js/plugins/pace/pace.min.js"></script>
+    
+
+
+</body>
+</html>

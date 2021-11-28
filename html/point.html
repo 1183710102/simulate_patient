@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> 主页面 </title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css?v=4.1.0" rel="stylesheet">
+
+    <script type="text/javascript">
+        if(location.search.substring(1)){
+            var score = parseFloat(location.search.substring(1));
+        }
+        else
+            var score=0;  
+
+        function jump_inquiry(){
+            var goal = "inquiry.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_physical_examination(){
+            var goal = "physical_examination.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_auxiliary_examination(){
+            var goal = "auxiliary_examination.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_DDX(){
+            var goal = "DDX.html?"+score;
+            window.location.href = goal;
+        }
+        function jump_treatment(){
+            var goal = "treatment.html?"+score;
+            window.location.href = goal;
+        }
+        function show_answer(){
+            var keys_quary_set = quary_set.getAll();
+            var div = document.getElementById("answer");
+            div.innerHTML += "<h3>问诊、体格检查以及辅助检查得分项</h3>"
+            for(var i=0;i<keys_quary_set.length;i++){
+                var tmp = quary_set.find(keys_quary_set[i]).score;
+                if(tmp!=0){
+                    div.innerHTML+="<tr><td>" + keys_quary_set[i] + "</td><td>"+tmp+"</td></tr>";
+                }
+            }
+            var html_primary_diagnosis = primary_diagnosis.showAll();
+            div.innerHTML = div.innerHTML+"<h3>初步诊断得分项</h3>"+html_primary_diagnosis;
+            var html_differential_diagnosis = differential_diagnosis.showAll();
+            div.innerHTML = div.innerHTML+"<h3>鉴别诊断得分项</h3>"+html_differential_diagnosis;
+            var html_diagnosis = diagnosis.showAll();
+            div.innerHTML = div.innerHTML+"<h3>确定诊断得分项</h3>"+html_diagnosis;
+        }
+    </script>
+    
+</head>
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeIn">
+
+            
+                    <div class="tab-content">
+                            <div class="panel-body">
+                            <div id="board">
+                                <p id='s' class='center'></p>
+                                <button class="btn-primary btn-lg" style="z-index: 9999;margin-left: 530px;" onclick="show_answer()">显示得分项</button>
+                                <table id="answer" style="margin-left: 500px;">
+                                    
+                                </table>
+
+                                <script type="text/javascript">
+                                    var div = document.getElementById("s");
+                                    var ans = document.getElementById("answer");
+                                    div.innerHTML = div.innerHTML + "最终得分："+score;
+                                    quary_set.showAll();
+                                    for(var key in quary_set){
+                                        alert(key);
+                                        if(quary_set.find(key).score!=0){
+                                            ans.innerHTML+= "<tr><td>"+key+"</td><td>"+quary_set.find(key).answer+"</td></tr>";
+                                        }
+                                    }
+                                </script>
+
+
+                                <h3>病例总结</h3>
+                                <p>  腹股沟疝是常见的腹壁先天性发育异常，小儿外科常见疾病之一，主要临床表现为幼儿出生后不久，在腹股沟部位有可复性肿块，80%在生后2～3个月时出现。腹股沟疝分为腹股沟斜疝和直疝，斜疝较常见，直疝罕见。</p>
+
+<p>  根据该患者的主诉（右腹股沟区可复性肿物一个月）、问诊、查体（主要为腹部触诊：腹软，右腹股沟区有压痛，无反跳痛及肌紧张；肝脾肋下未及，Murphy征阴性；右腹股沟区可触及一“鹌鹑卵”大小肿物，质软、光滑有弹性、边界不清，有丝绸摩擦感，手可协助还纳至腹腔。生殖器检查：右侧阴囊略大、触痛阳性，阴囊内可触及睾丸。） 可作出初步诊断：右侧腹股沟肿物/腹股沟肿物/右侧腹股沟斜疝/腹股沟斜疝。 根据患者现实情况安排辅助检查，同时注意鉴别疾病的检查，如该患虽被初步诊断为右腹股沟斜疝，但手术过程中仍需探查左侧是否有隐匿性疝，最终根据检查结果作出确定诊断。</p>
+
+<p>小儿腹股沟斜疝的治疗原则：<br>（1）腹股沟疝诊断后可早期手术，因出现嵌顿概率较大，另外疝囊自行闭合的概率也少。<br>
+（2）可采用腹腔镜手术。对于对侧疝的探查及双侧疝手术有一定优势。<br>
+（3）嵌顿疝患儿手法复位失败等情况需紧急手术。合并肠管较窄，怀疑有肠管坏死患儿，术前需纠正水电解质失衡，应用抗生素防治感染。</p>
+                                
+                                <video width="320" height="240" controls>
+                                  <source src="img/last_video.mp4" type="video/mp4">
+                                您的浏览器不支持Video标签。
+                                </video>
+
+                                <!-- <script type="text/javascript">
+                                    var html=points.showAll();
+                                    alert(html);
+                                    var div = document.getElementById("board");
+                                    div.innerHTML = div.innerHTML + html;
+                                </script> -->
+                                
+                            </div>
+                            </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+</div>
+
+ 
+<!-- 全局js -->
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/bootstrap.min.js?v=3.3.6"></script>
+
+
+
+    <!-- 自定义js -->
+    <script src="js/content.js?v=1.0.0"></script>
+    <script src="js/dictionary.js"></script>
+    
+
+
+</body>
+</html>
